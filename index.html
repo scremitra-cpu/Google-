@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Gamer OS Ultimate</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0b0b0b;
+    color:white;
+}
+
+/* LOGIN */
+#login{
+    width:320px;
+    margin:70px auto;
+    padding:20px;
+    border:1px solid #333;
+    border-radius:10px;
+    text-align:center;
+}
+
+/* APP */
+#app{ display:none; padding:10px; }
+
+/* TOP */
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* GOOGLE */
+.logo{
+    text-align:center;
+    font-size:45px;
+    margin-top:10px;
+}
+
+/* SEARCH */
+.searchBox{
+    text-align:center;
+}
+
+.searchBox input{
+    width:65%;
+    padding:10px;
+    border-radius:20px;
+    border:none;
+}
+
+/* GAMES */
+.games{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.game{
+    width:120px;
+    height:120px;
+    margin:10px;
+    background:#111;
+    border:1px solid #333;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.game:hover{
+    box-shadow:0 0 15px #00f0ff;
+    transform:scale(1.05);
+}
+
+/* AVATAR */
+#avatar{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    border:2px solid #00f0ff;
+    cursor:pointer;
+}
+
+/* LOADING */
+#loadingScreen{
+    display:none;
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background:black;
+    color:white;
+    text-align:center;
+    padding-top:200px;
+    z-index:99999;
+}
+
+/* RESULT PAGE */
+#resultPage{
+    display:none;
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background:#111;
+    color:white;
+    padding:20px;
+    overflow:auto;
+    z-index:99999;
+}
+
+/* INTERNET OFF */
+#netOff{
+    display:none;
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background:black;
+    text-align:center;
+    padding-top:150px;
+    z-index:99998;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- INTERNET OFF -->
+<div id="netOff">
+    <h1>🌐 INTERNET OFF</h1>
+
+    <input id="netPass" placeholder="Enter Internet Password">
+    <button onclick="turnOnNet()">ON</button>
+</div>
+
+<!-- LOGIN -->
+<div id="login">
+    <h2>🔐 LOGIN</h2>
+
+    <input id="user"><br>
+    <input id="pass" type="password"><br>
+
+    <button onclick="login()">Enter</button>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+    <div class="top">
+
+        <!-- AVATAR -->
+        <div>
+            <input type="file" id="file" style="display:none" onchange="setAvatar()">
+            <img id="avatar" onclick="document.getElementById('file').click()">
+        </div>
+
+        <button onclick="turnOffNet()">📴 Net OFF</button>
+        <button onclick="logout()">🚪 Logout</button>
+
+    </div>
+
+    <!-- GOOGLE -->
+    <div class="logo">
+        <span style="color:#4285F4">G</span>
+        <span style="color:#EA4335">o</span>
+        <span style="color:#FBBC05">o</span>
+        <span style="color:#4285F4">g</span>
+        <span style="color:#34A853">l</span>
+        <span style="color:#EA4335">e</span>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="searchBox">
+        <input id="search" placeholder="Search anything...">
+        <button onclick="search()">🔎</button>
+    </div>
+
+    <!-- GAMES -->
+    <h3 style="text-align:center;">🎮 Games</h3>
+
+    <div class="games">
+        <div class="game" onclick="openGame('https://crazygames.com')">CrazyGames</div>
+        <div class="game" onclick="openGame('https://poki.com')">Poki</div>
+        <div class="game" onclick="openGame('https://y8.com')">Y8</div>
+    </div>
+
+</div>
+
+<!-- LOADING -->
+<div id="loadingScreen">
+    <h1>🔎 Searching...</h1>
+</div>
+
+<!-- RESULT -->
+<div id="resultPage">
+    <button onclick="closeResult()">❌ Close</button>
+    <h2>📄 Search Result</h2>
+    <p id="resultText"></p>
+</div>
+
+<script>
+
+/* LOGIN */
+function login(){
+    document.getElementById("login").style.display="none";
+    document.getElementById("app").style.display="block";
+}
+
+/* SEARCH */
+function search(){
+    let q=document.getElementById("search").value;
+
+    document.getElementById("loadingScreen").style.display="block";
+
+    setTimeout(function(){
+
+        document.getElementById("loadingScreen").style.display="none";
+        document.getElementById("resultPage").style.display="block";
+
+        document.getElementById("resultText").innerHTML=
+        "🔍 You searched: <b>"+q+"</b><br><br>" +
+        "📌 This is a full info page.<br>" +
+        "🌐 Real system would show live results here.";
+
+    },2000);
+}
+
+/* CLOSE RESULT */
+function closeResult(){
+    document.getElementById("resultPage").style.display="none";
+}
+
+/* GAME */
+function openGame(url){
+    window.open(url,"_blank");
+}
+
+/* AVATAR */
+function setAvatar(){
+    let file=document.getElementById("file").files[0];
+    let reader=new FileReader();
+
+    reader.onload=function(e){
+        document.getElementById("avatar").src=e.target.result;
+        localStorage.setItem("avatar",e.target.result);
+    }
+
+    reader.readAsDataURL(file);
+}
+
+/* LOAD AVATAR */
+window.onload=function(){
+    let img=localStorage.getItem("avatar");
+    if(img){
+        document.getElementById("avatar").src=img;
+    }
+}
+
+/* INTERNET OFF */
+function turnOffNet(){
+    document.getElementById("netOff").style.display="block";
+    document.getElementById("app").style.display="none";
+}
+
+/* INTERNET ON */
+function turnOnNet(){
+    let p=document.getElementById("netPass").value;
+
+    if(p==="1986"){
+        document.getElementById("netOff").style.display="none";
+        document.getElementById("app").style.display="block";
+    }else{
+        alert("Wrong Password");
+    }
+}
+
+/* LOGOUT */
+function logout(){
+    location.reload();
+}
+
+</script>
+
+</body>
+</html>
